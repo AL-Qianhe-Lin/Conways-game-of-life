@@ -41,9 +41,7 @@ export default function gameTrigger() {
         console.error()
       }
 
-      let locateClicks = allCells.filter((x) => {
-        return x.status === true
-      })
+      let selectedCells = allCells.filter((x) => x.status === true)
 
       // let neighbourNorthWest = allCells[i - 6]
       // let neighbourNorth = allCells[i - 5]
@@ -67,11 +65,6 @@ export default function gameTrigger() {
 
       // eslint-disable-next-line no-inner-declarations
       function startGame() {
-        let selectedCells = locateClicks.map((x) => {
-          x.status === true
-          return x
-        })
-
         selectedCells.forEach((y) => {
           let findNW = y.id - 6
           let findN = y.id - 5
@@ -108,31 +101,20 @@ export default function gameTrigger() {
           })
 
           let neighbours = [NW, N, NE, E, SE, S, SW, W]
-          console.log('neighbours: ', neighbours)
-          console.log('selected cells: ', selectedCells)
+          // console.log('neighbours: ', neighbours)
+          // console.log('selected cells: ', selectedCells)
 
           setInterval(() => {
-            for (let z = 0; z < neighbours.length; z++) {
-              let neighbour = neighbours[z]
-              if (neighbour == undefined) {
-                neighbour = { cell: null, status: false, id: null }
-              }
-              // if (2 > neighbour.status == true) {
-              //   console.log('less than two neighbours are active')
-              //   y.status = false
-              // }
-              if (2 <= neighbour.status === true) {
-                console.log('2 or more neighbours are active')
-                y.status = true
-              }
-              //   if (y.status == false) {
-              //     y.cell.style.backgroundColor = 'white'
-              //   }
-              else {
-                console.log('less than two neighbours are active')
-                y.status = false
-                y.cell.style.backgroundColor = 'white'
-              }
+            let numOfTrue = neighbours.filter((n) => n.status === true)
+            if (numOfTrue.length >= 2) {
+              console.log('live', y)
+            }
+            if (numOfTrue.length < 2) {
+              y.status = false
+              console.log('die', y)
+            }
+            if (y.status === false) {
+              y.cell.style.backgroundColor = 'white'
             }
           }, 5000)
         })
@@ -142,6 +124,5 @@ export default function gameTrigger() {
     }
   }
 }
-// }
 
 gameTrigger()

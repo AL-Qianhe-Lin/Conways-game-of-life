@@ -164,7 +164,7 @@ function gameTrigger() {
         console.error();
       }
 
-      var locateClicks = allCells.filter(function (x) {
+      var selectedCells = allCells.filter(function (x) {
         return x.status === true;
       }); // let neighbourNorthWest = allCells[i - 6]
       // let neighbourNorth = allCells[i - 5]
@@ -187,10 +187,6 @@ function gameTrigger() {
       // eslint-disable-next-line no-inner-declarations
 
       function startGame() {
-        var selectedCells = locateClicks.map(function (x) {
-          x.status === true;
-          return x;
-        });
         selectedCells.forEach(function (y) {
           var findNW = y.id - 6;
           var findN = y.id - 5;
@@ -224,36 +220,25 @@ function gameTrigger() {
           var W = allCells.find(function (x) {
             return x.id === findW;
           });
-          var neighbours = [NW, N, NE, E, SE, S, SW, W];
-          console.log('neighbours: ', neighbours);
-          console.log('selected cells: ', selectedCells);
+          var neighbours = [NW, N, NE, E, SE, S, SW, W]; // console.log('neighbours: ', neighbours)
+          // console.log('selected cells: ', selectedCells)
+
           setInterval(function () {
-            for (var z = 0; z < neighbours.length; z++) {
-              var neighbour = neighbours[z];
+            var numOfTrue = neighbours.filter(function (n) {
+              return n.status === true;
+            });
 
-              if (neighbour == undefined) {
-                neighbour = {
-                  cell: null,
-                  status: false,
-                  id: null
-                };
-              } // if (2 > neighbour.status == true) {
-              //   console.log('less than two neighbours are active')
-              //   y.status = false
-              // }
+            if (numOfTrue.length >= 2) {
+              console.log('live', y);
+            }
 
+            if (numOfTrue.length < 2) {
+              y.status = false;
+              console.log('die', y);
+            }
 
-              if (2 <= neighbour.status === true) {
-                console.log('2 or more neighbours are active');
-                y.status = true;
-              } //   if (y.status == false) {
-              //     y.cell.style.backgroundColor = 'white'
-              //   }
-              else {
-                console.log('less than two neighbours are active');
-                y.status = false;
-                y.cell.style.backgroundColor = 'white';
-              }
+            if (y.status === false) {
+              y.cell.style.backgroundColor = 'white';
             }
           }, 5000);
         });
@@ -267,8 +252,7 @@ function gameTrigger() {
       _loop(i);
     }
   }
-} // }
-
+}
 gameTrigger();
 
 /***/ }),
